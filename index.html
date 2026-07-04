@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QikPik — Avatar Maker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="qp-app">
+  <header class="qp-header">
+    <h1 class="qp-header__logo">Q<span class="qp-header__logo-accent">!</span>KPIC</h1>
+    <p class="qp-header__tagline">avatar maker</p>
+  </header>
+
+  <main class="qp-main">
+    <section class="qp-stage">
+      <div class="qp-stage__frame">
+        <svg class="qp-stage__svg" id="avatar" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <mask id="hairMask" maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="640">
+              <rect x="0" y="0" width="640" height="640" fill="#000"/>
+              <g id="hairMaskArt"></g>
+            </mask>
+            <mask id="beardMask" maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="640">
+              <rect x="0" y="0" width="640" height="640" fill="#000"/>
+              <g id="beardMaskArt"></g>
+            </mask>
+            <clipPath id="stageClip"><rect x="0" y="0" width="640" height="640"/></clipPath>
+          </defs>
+          <g clip-path="url(#stageClip)">
+            <g id="L_skin"></g>
+            <g id="L_natural"></g>
+            <g id="L_mouth"></g>
+            <g id="L_eyes"></g>
+            <g id="L_nose"></g>
+            <g id="L_haircolour" mask="url(#hairMask)"></g>
+            <g id="L_beardcolour" mask="url(#beardMask)"></g>
+            <g id="L_accessories"></g>
+            <g id="L_glasses"></g>
+          </g>
+        </svg>
+      </div>
+      <div class="qp-actions">
+        <button class="qp-actions__btn qp-actions__btn--randomise" id="btnRandom" title="Randomise">🎲 Randomise</button>
+        <button class="qp-actions__btn" id="btnPng" title="Download PNG">⬇ PNG</button>
+        <button class="qp-actions__btn" id="btnSvg" title="Download SVG">⬇ SVG</button>
+      </div>
+    </section>
+
+    <section class="qp-editor">
+      <nav class="qp-tabs" id="tabs"></nav>
+      <div class="qp-stepper">
+        <button class="qp-stepper__btn" id="btnPrev" title="Previous">‹</button>
+        <div class="qp-stepper__count" id="stepCount"></div>
+        <button class="qp-stepper__btn" id="btnNext" title="Next">›</button>
+      </div>
+      <p class="qp-editor__hint">Tip: tap the avatar to cycle the selected category.</p>
+    </section>
+  </main>
+
+  <footer class="qp-footer">
+    <p class="qp-footer__note">Web remake of the QikPic AIR app — original artwork © Sideshow Melv.</p>
+  </footer>
+</div>
+<script src="assets.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
