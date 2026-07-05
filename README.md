@@ -10,11 +10,12 @@ extracted from the original app's SWF.
 
 ```
 index.html, app.js, style.css   the app
-assets.js                       all avatar artwork (per-frame SVG fragments)
-icons/                          panel button icons + wordmark (from the app's own buttons)
+assets.js                       runtime art bundle — BUILT from art/, don't hand-edit
+art/                            every feature frame as an editable standalone SVG
+icons/                          panel button icons + wordmarks (from the app's own buttons)
 public/                         favicon, OG image, .htaccess (deployed alongside)
-source/QikPic.swf               canonical source asset — every frame of art lives here
-tools/                          SWF extraction pipeline (regenerates assets.js)
+source/QikPic.swf               original source asset (the art was extracted from here)
+tools/                          extraction + build pipeline
 ruffle-test/                    dev harness: original avatar in Ruffle for comparison
 docs/                           reference images (original panel design)
 server.js                       tiny static server for local dev
@@ -41,16 +42,34 @@ Beard colour always follows hair colour. Tap a tile (or the avatar) to
 cycle that category; the dice does a slot-machine randomise; PNG/SVG
 download the current avatar.
 
-## Regenerating assets.js
+## Editing the artwork
+
+`art/<feature>/<feature>-NN.svg` is the editable source of truth — one
+640×640 SVG per variant, all sharing the avatar's coordinate space, so
+every layer overlays correctly. Edit in Illustrator/Inkscape/anything,
+then rebuild the runtime bundle:
+
+```
+python3 tools/build_assets.py     # art/ -> assets.js (no dependencies)
+```
+
+Notes:
+- File order within a folder = variant order in the app (NN suffix).
+- `hair/` and `beard/` are stencils: the app derives their white mask
+  variants automatically at build time.
+- An empty `<svg>` file is a valid "none" variant.
+
+## Re-extracting from the original SWF
+
+The art was originally extracted from `source/QikPic.swf`:
 
 ```
 python3 -m venv venv && venv/bin/pip install pillow
-venv/bin/python tools/export_frames.py
+venv/bin/python tools/export_frames.py   # SWF -> assets.js
+python3 tools/export_art.py              # assets.js -> art/ SVG files
 ```
 
-Reads `source/QikPic.swf`, writes `assets.js`. The output is deterministic —
-regenerating from the same SWF produces a byte-identical file.
-
+Both steps are deterministic (byte-identical output from the same input).
 Other tools: `swf2svg.py` (SWF shape/sprite/bitmap parser — the core
 library), `swfscan.py` (tag inventory), `swftree.py` (sprite tree /
 instance names / ABC strings).
