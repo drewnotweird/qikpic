@@ -125,6 +125,14 @@
   $("btnAboutClose").onclick = () => { about.hidden = true; };
   about.addEventListener("click", (e) => { if (e.target === about) about.hidden = true; });
 
+  // Unique per download: qikpic-avatar-YYYYMMDD-HHMMSS.png
+  function avatarFileName() {
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, "0");
+    return `qikpic-avatar-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}` +
+      `-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.png`;
+  }
+
   function fullSvgString() {
     const svg = $("avatar");
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + svg.outerHTML;
@@ -152,7 +160,7 @@
     avatarPng((png) => {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(png);
-      a.download = "qikpic-avatar.png";
+      a.download = avatarFileName();
       a.click();
       URL.revokeObjectURL(a.href);
     });
@@ -160,7 +168,7 @@
 
   $("btnShare").onclick = () => {
     avatarPng(async (png) => {
-      const file = new File([png], "qikpic-avatar.png", { type: "image/png" });
+      const file = new File([png], avatarFileName(), { type: "image/png" });
       try {
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({ files: [file], title: "QikPic avatar" });
@@ -176,7 +184,7 @@
         // last resort: download the image instead
         const a = document.createElement("a");
         a.href = URL.createObjectURL(png);
-        a.download = "qikpic-avatar.png";
+        a.download = avatarFileName();
         a.click();
         URL.revokeObjectURL(a.href);
       }
