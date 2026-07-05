@@ -8,18 +8,22 @@
     "haircolour", "beardcolour", "accessories", "glasses",
   ];
 
-  // Category tiles: feature key, label, tile colour (per layout reference).
+  // Category tiles: feature key, icon file, button colour — icons and
+  // colours extracted from the original app's layer-panel buttons
+  // (shapes 171/321-342), panel order per the original app.
+  // The two colour tiles (skin, haircolour) have no fixed colour: their
+  // background is the currently selected swatch, like the original.
   const TILES = [
-    ["skin", "Skin", "#d95757"],
-    ["natural", "Natural", "#dd8047"],
-    ["eyes", "Eyes", "#d9a938"],
-    ["nose", "Nose", "#a2c04b"],
-    ["mouth", "Mouth", "#5cb87a"],
-    ["hair", "Hair", "#4fb3ad"],
-    ["haircolour", "Hair Colour", "#5585d7"],
-    ["beard", "Beard", "#6a5acd"],
-    ["accessories", "Extras", "#a45ad0"],
-    ["glasses", "Glasses", "#cf5fa6"],
+    ["skin", "colour", null],
+    ["eyes", "eyes", "#da4341"],
+    ["nose", "nose", "#d945c1"],
+    ["mouth", "mouth", "#6243da"],
+    ["natural", "natural", "#4178db"],
+    ["haircolour", "colour", null],
+    ["hair", "hair", "#41d4db"],
+    ["beard", "beard", "#46dc42"],
+    ["glasses", "glasses", "#dcd742"],
+    ["accessories", "extras", "#da7242"],
   ];
 
   const state = {};
@@ -51,16 +55,24 @@
   function buildGrid() {
     const grid = $("grid");
     grid.innerHTML = "";
-    for (const [key, label, colour] of TILES) {
+    for (const [key, icon, colour] of TILES) {
       const tile = document.createElement("button");
       tile.className = "qp-grid__tile" +
         (key === activeKey ? " qp-grid__tile--active" : "");
-      tile.style.background = colour;
-      const n = A[key].frames.length;
-      const i = state[key];
-      const isEmpty = A[key].frames[i].trim() === "";
-      tile.innerHTML = `<span class="qp-grid__label">${label}</span>` +
-        `<span class="qp-grid__count">${isEmpty ? "none" : `${i + 1} / ${n}`}</span>`;
+      let swatch = "";
+      if (colour) {
+        tile.style.background = colour;
+      } else {
+        // live swatch background: the currently selected skin / hair colour
+        const src = key === "skin" ? A.skin.frames[state.skin]
+                                   : A.haircolour.frames[state.haircolour];
+        swatch = `<span class="qp-grid__swatch"><svg viewBox="0 0 640 640" ` +
+          `preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">` +
+          src.replace(/id="/g, `id="sw${key}`).replace(/url\(#/g, `url(#sw${key}`) +
+          `</svg></span>`;
+      }
+      tile.innerHTML = swatch +
+        `<img class="qp-grid__icon" src="icons/${icon}.svg" alt="${key}">`;
       tile.onclick = () => {
         activeKey = key;
         cycle(key);
