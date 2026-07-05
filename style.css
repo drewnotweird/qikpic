@@ -80,6 +80,9 @@ body {
   background: rgba(39, 56, 58, 0.55);
 }
 
+/* display:flex above would otherwise override the hidden attribute */
+.qp-about[hidden] { display: none; }
+
 .qp-about__panel {
   background: #fff;
   border-radius: 18px;
