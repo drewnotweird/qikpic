@@ -19,6 +19,14 @@ jobs:
           cp index.html app.js assets.js style.css dist/
           cp -R icons dist/icons
 
+      # FTP-Deploy-Action requires server-dir to end with "/" — normalise
+      # so the secret works with or without a trailing slash.
+      - name: Normalise server dir
+        id: cfg
+        run: echo "dir=${SERVER_DIR%/}/" >> "$GITHUB_OUTPUT"
+        env:
+          SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+
       - name: Deploy to Fasthosts via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -26,5 +34,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server-dir: ${{ steps.cfg.outputs.dir }}
           timeout: 120000
