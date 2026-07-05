@@ -99,9 +99,29 @@
   const POP_LAYERS = new Set(["natural", "mouth", "eyes", "nose", "accessories", "glasses"]);
 
   function reactToChange(key) {
-    if (POP_LAYERS.has(key)) retrigger($("L_" + key), "qp-pop");
-    else retrigger($("avatar"), "qp-bounce");
+    if (POP_LAYERS.has(key)) {
+      $("L_" + key).classList.remove("qp-blink");  // don't fight the blink
+      retrigger($("L_" + key), "qp-pop");
+    } else {
+      retrigger($("avatar"), "qp-bounce");
+    }
   }
+
+  /* ---------- idle blinking ---------- */
+  function blink() {
+    if (randomising || document.hidden) return;
+    const eyes = $("L_eyes");
+    eyes.classList.remove("qp-pop");
+    retrigger(eyes, "qp-blink");
+  }
+
+  (function scheduleBlink() {
+    setTimeout(() => {
+      blink();
+      if (Math.random() < 0.15) setTimeout(blink, 250);  // occasional double blink
+      scheduleBlink();
+    }, 2800 + Math.random() * 4200);
+  })();
 
   const CONFETTI_COLOURS = ["#da4341", "#d945c1", "#6243da", "#4178db",
                             "#41d4db", "#46dc42", "#dcd742", "#da7242"];
