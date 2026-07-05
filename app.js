@@ -52,10 +52,11 @@
   /* ---------- options grid ---------- */
   let activeKey = "skin";
 
-  function buildGrid() {
-    const grid = $("grid");
-    grid.innerHTML = "";
-    for (const [key, icon, colour] of TILES) {
+  // First 5 tiles form the top row in portrait / left rail in landscape;
+  // the last 5 form the bottom row / right rail.
+  function buildRail(container, tiles) {
+    container.innerHTML = "";
+    for (const [key, icon, colour] of tiles) {
       const tile = document.createElement("button");
       tile.className = "qp-grid__tile" +
         (key === activeKey ? " qp-grid__tile--active" : "");
@@ -77,8 +78,13 @@
         activeKey = key;
         cycle(key);
       };
-      grid.appendChild(tile);
+      container.appendChild(tile);
     }
+  }
+
+  function buildGrid() {
+    buildRail($("gridLeft"), TILES.slice(0, 5));
+    buildRail($("gridRight"), TILES.slice(5, 10));
   }
 
   // Tap a tile (or the avatar) to flip to the next variant — like the
