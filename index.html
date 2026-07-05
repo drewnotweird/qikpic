@@ -9,13 +9,28 @@
 <body>
 <div class="qp-app">
   <header class="qp-top">
-    <img class="qp-top__logo" src="icons/logo.svg" alt="QikPic">
-    <div class="qp-top__actions">
-      <button class="qp-top__btn qp-top__btn--randomise" id="btnRandom" title="Randomise">🎲</button>
+    <div class="qp-top__actions qp-top__actions--left">
       <button class="qp-top__btn" id="btnPng" title="Download PNG">PNG</button>
       <button class="qp-top__btn" id="btnSvg" title="Download SVG">SVG</button>
     </div>
+    <img class="qp-top__logo" src="icons/logo.svg" alt="QikPic">
+    <div class="qp-top__actions qp-top__actions--right">
+      <button class="qp-top__btn qp-top__btn--randomise" id="btnRandom" title="Randomise">🎲</button>
+      <button class="qp-top__btn" id="btnAbout" title="About">About</button>
+    </div>
   </header>
+
+  <div class="qp-about" id="aboutOverlay" hidden>
+    <div class="qp-about__panel">
+      <img class="qp-about__logo" src="icons/logo.svg" alt="QikPic">
+      <p class="qp-about__text">
+        Web remake of the QikPic avatar maker, originally an AIR app for
+        iOS and Android. Artwork and design by
+        <a href="https://drewnotweird.co.uk/work/qikpic/" target="_blank" rel="noopener">Andrew Nicolson</a>.
+      </p>
+      <button class="qp-about__close qp-top__btn" id="btnAboutClose">Close</button>
+    </div>
+  </div>
 
   <main class="qp-body">
     <section class="qp-stage">

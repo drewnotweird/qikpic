@@ -31,7 +31,7 @@ body {
   height: var(--qp-strip);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0 22px;
   background: #fff;
 }
@@ -68,6 +68,38 @@ body {
 .qp-top__btn:active { transform: scale(0.95); }
 .qp-top__btn--randomise { background: var(--qp-red); font-size: 18px; }
 .qp-top__btn--randomise:hover { background: #c94640; }
+
+/* ---------- about overlay ---------- */
+.qp-about {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(39, 56, 58, 0.55);
+}
+
+.qp-about__panel {
+  background: #fff;
+  border-radius: 18px;
+  padding: 30px 34px;
+  max-width: 380px;
+  margin: 20px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.qp-about__logo { height: 34px; margin-bottom: 14px; }
+
+.qp-about__text {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--qp-ink);
+}
+
+.qp-about__text a { color: var(--qp-teal-dark); font-weight: 700; }
 
 /* ---------- body: avatar + options grid ---------- */
 .qp-body {

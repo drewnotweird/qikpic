@@ -114,6 +114,11 @@
     spin(0);
   };
 
+  const about = $("aboutOverlay");
+  $("btnAbout").onclick = () => { about.hidden = false; };
+  $("btnAboutClose").onclick = () => { about.hidden = true; };
+  about.addEventListener("click", (e) => { if (e.target === about) about.hidden = true; });
+
   function fullSvgString() {
     const svg = $("avatar");
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + svg.outerHTML;
