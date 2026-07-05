@@ -20,7 +20,7 @@ jobs:
           cp public/.htaccess dist/
           cp -R icons dist/icons
           mkdir dist/public
-          cp public/favicon.png public/og-qikpic.jpg dist/public/
+          cp public/*.png public/*.jpg dist/public/
 
       # FTP-Deploy-Action requires server-dir to end with "/" — normalise
       # so the secret works with or without a trailing slash.

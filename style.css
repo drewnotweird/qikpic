@@ -105,33 +105,19 @@ body {
   animation: qp-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.qp-about__logo {
-  height: 34px;
-  margin-bottom: 14px;
-  animation: qp-wiggle 0.7s 0.35s ease-in-out;
-}
-
-/* bobbing parade of the category icons */
-.qp-about__parade {
+/* the three makers' avatars, bouncing in one after another */
+.qp-about__team {
   display: flex;
   justify-content: center;
-  gap: 7px;
+  gap: 14px;
   margin: 4px 0 18px;
 }
 
-.qp-about__chip {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: qp-bob 1.5s calc(var(--i) * 0.12s) ease-in-out infinite;
-}
-
-.qp-about__chip img {
-  width: 64%;
-  display: block;
+.qp-about__face {
+  width: 84px;
+  height: 84px;
+  border-radius: 18px;
+  animation: qp-face-in 0.5s calc(0.15s + var(--i) * 0.13s) cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes qp-fade {
@@ -142,15 +128,8 @@ body {
   from { transform: scale(0.5); opacity: 0; }
 }
 
-@keyframes qp-wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-7deg) scale(1.08); }
-  60% { transform: rotate(6deg) scale(1.05); }
-}
-
-@keyframes qp-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
+@keyframes qp-face-in {
+  from { transform: scale(0) rotate(-12deg); opacity: 0; }
 }
 
 /* ---------- juice: reactions, spins and confetti ---------- */
