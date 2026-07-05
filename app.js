@@ -8,18 +8,18 @@
     "haircolour", "beardcolour", "accessories", "glasses",
   ];
 
-  // Editor categories: feature key, label. hair/beard are stencils driving the masks.
-  const TABS = [
-    ["skin", "Skin"],
-    ["natural", "Natural"],
-    ["eyes", "Eyes"],
-    ["nose", "Nose"],
-    ["mouth", "Mouth"],
-    ["hair", "Hair"],
-    ["haircolour", "Hair Colour"],
-    ["beard", "Beard"],
-    ["accessories", "Extras"],
-    ["glasses", "Glasses"],
+  // Category tiles: feature key, label, tile colour (per layout reference).
+  const TILES = [
+    ["skin", "Skin", "#d95757"],
+    ["natural", "Natural", "#dd8047"],
+    ["eyes", "Eyes", "#d9a938"],
+    ["nose", "Nose", "#a2c04b"],
+    ["mouth", "Mouth", "#5cb87a"],
+    ["hair", "Hair", "#4fb3ad"],
+    ["haircolour", "Hair Colour", "#5585d7"],
+    ["beard", "Beard", "#6a5acd"],
+    ["accessories", "Extras", "#a45ad0"],
+    ["glasses", "Glasses", "#cf5fa6"],
   ];
 
   const state = {};
@@ -45,39 +45,40 @@
     localStorage.setItem("qikpik-avatar", JSON.stringify(state));
   }
 
-  /* ---------- editor UI ---------- */
-  let activeTab = "skin";
+  /* ---------- options grid ---------- */
+  let activeKey = "skin";
 
-  function buildTabs() {
-    const nav = $("tabs");
-    nav.innerHTML = "";
-    for (const [key, label] of TABS) {
-      const b = document.createElement("button");
-      b.className = "qp-tabs__tab" + (key === activeTab ? " qp-tabs__tab--active" : "");
-      b.textContent = label;
-      b.onclick = () => { activeTab = key; buildTabs(); updateStepper(); };
-      nav.appendChild(b);
+  function buildGrid() {
+    const grid = $("grid");
+    grid.innerHTML = "";
+    for (const [key, label, colour] of TILES) {
+      const tile = document.createElement("button");
+      tile.className = "qp-grid__tile" +
+        (key === activeKey ? " qp-grid__tile--active" : "");
+      tile.style.background = colour;
+      const n = A[key].frames.length;
+      const i = state[key];
+      const isEmpty = A[key].frames[i].trim() === "";
+      tile.innerHTML = `<span class="qp-grid__label">${label}</span>` +
+        `<span class="qp-grid__count">${isEmpty ? "none" : `${i + 1} / ${n}`}</span>`;
+      tile.onclick = () => {
+        activeKey = key;
+        cycle(key);
+      };
+      grid.appendChild(tile);
     }
   }
 
-  function updateStepper() {
-    const n = A[activeTab].frames.length;
-    const i = state[activeTab];
-    const isEmpty = A[activeTab].frames[i].trim() === "";
-    $("stepCount").textContent = isEmpty ? "none" : `${i + 1} / ${n}`;
-  }
-
-  function cycle(dir) {
-    const n = A[activeTab].frames.length;
-    state[activeTab] = (state[activeTab] + dir + n) % n;
+  // Tap a tile (or the avatar) to flip to the next variant — like the
+  // original app's hitzone.
+  function cycle(key) {
+    const n = A[key].frames.length;
+    state[key] = (state[key] + 1) % n;
     renderAvatar();
-    updateStepper();
+    buildGrid();
   }
 
-  $("btnPrev").onclick = () => cycle(-1);
-  $("btnNext").onclick = () => cycle(1);
-  // Like the original app's hitzone: tap the avatar to cycle the category.
-  $("avatar").addEventListener("click", () => cycle(1));
+  $("avatar").addEventListener("click", () => cycle(activeKey));
 
   /* ---------- actions ---------- */
   let randomising = false;
@@ -92,7 +93,7 @@
       renderAvatar();
       if (n >= steps) {
         randomising = false;
-        updateStepper();
+        buildGrid();
         return;
       }
       // slot-machine feel: quick flips that slow to a stop
@@ -140,16 +141,15 @@
 
   /* ---------- boot ---------- */
   renderAvatar();
-  buildTabs();
-  updateStepper();
+  buildGrid();
 
   // debug/testing hook
   window.__qp = {
     state,
     setAll(i) {
       for (const k of Object.keys(A)) state[k] = Math.min(i, A[k].frames.length - 1);
-      renderAvatar(); updateStepper();
+      renderAvatar(); buildGrid();
     },
-    set(k, i) { state[k] = i; renderAvatar(); updateStepper(); },
+    set(k, i) { state[k] = i; renderAvatar(); buildGrid(); },
   };
 })();
