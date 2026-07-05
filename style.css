@@ -26,37 +26,27 @@ body {
 
 /* ---------- top strip (100px, per layout reference) ---------- */
 .qp-top {
+  position: relative;
   flex: none;
   height: var(--qp-strip);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0 22px;
   background: #fff;
 }
 
-.qp-top__brand { display: flex; align-items: baseline; gap: 14px; }
-
+/* original app wordmark, centred in the strip */
 .qp-top__logo {
-  margin: 0;
-  font-size: 34px;
-  letter-spacing: 2px;
-  color: var(--qp-teal);
-  font-weight: 800;
-}
-
-.qp-top__logo-accent { color: var(--qp-red); }
-
-.qp-top__credit {
-  margin: 0;
-  font-size: 11px;
-  color: #93a7a8;
-  font-weight: 600;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 38px;
 }
 
 @media (max-width: 640px) {
-  .qp-top__credit { display: none; }
-  .qp-top__logo { font-size: 26px; }
+  .qp-top__logo { height: 28px; }
 }
 
 .qp-top__actions { display: flex; gap: 8px; }
