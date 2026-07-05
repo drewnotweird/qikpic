@@ -36,7 +36,8 @@ body {
   background: #fff;
 }
 
-/* original app wordmark, centred in the strip */
+/* original app wordmark, centred in the strip — wide in landscape,
+   stacked variant in portrait */
 .qp-top__logo {
   position: absolute;
   left: 50%;
@@ -45,8 +46,19 @@ body {
   height: 38px;
 }
 
+.qp-top__logo--stacked { height: 64px; }
+
+@media (orientation: landscape) {
+  .qp-top__logo--stacked { display: none; }
+}
+
+@media (orientation: portrait) {
+  .qp-top__logo--wide { display: none; }
+}
+
 @media (max-width: 640px) {
-  .qp-top__logo { height: 28px; }
+  .qp-top__logo--wide { height: 28px; }
+  .qp-top__logo--stacked { height: 56px; }
 }
 
 .qp-top__actions { display: flex; gap: 8px; }
