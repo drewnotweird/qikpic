@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>QikPic via Ruffle</title>
-<style>body{margin:0;background:#333}#player{width:640px;height:1136px}</style>
+<head><meta charset="utf-8"><title>QikPic via Ruffle — ground-truth harness</title>
+<style>body{margin:0;background:#333}#player{width:640px;height:640px}</style>
 </head>
 <body>
 <div id="player"></div>
@@ -12,9 +12,11 @@ window.addEventListener("load", () => {
   const ruffle = window.RufflePlayer.newest();
   const player = ruffle.createPlayer();
   player.style.width = "640px";
-  player.style.height = "1136px";
+  player.style.height = "640px";
   document.getElementById("player").appendChild(player);
-  player.ruffle().load({url: "QikPic.swf", autoplay: "on", unmuteOverlay: "hidden", scaleMode: "showAll"});
+  // face_stage.swf: patched library placing face_mc on a 640x640 stage.
+  // The timeline cycles all variants; set player.suspended = true to freeze.
+  player.ruffle().load({url: "face_stage.swf", autoplay: "on", unmuteOverlay: "hidden", scaleMode: "showAll"});
 });
 </script>
 </body>

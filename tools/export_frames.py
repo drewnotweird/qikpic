@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Export every frame of each avatar feature clip as SVG fragments into assets.js."""
-import json, re, struct, sys
+import json, os, re, struct, sys
 from swf2svg import (BR, load_swf, iter_tags, parse_shape, shape_body,
                      mat_str, read_matrix)
 
@@ -46,7 +46,8 @@ def parse_sprite_frames(data):
     return sid, frames
 
 def main():
-    body = load_swf("qikpik/assets/QikPic.swf")
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    body = load_swf(os.path.join(repo, "source", "QikPic.swf"))
     shapes, all_sprites = {}, {}
     for code, data in iter_tags(body):
         if code in SHAPE_VER:
@@ -96,7 +97,7 @@ def main():
 
     counts = {k: len(v["frames"]) for k, v in out.items()}
     print(counts)
-    with open("/Users/andrew/Documents/Claude projects/whiskyblender/qikpik-web/assets.js", "w") as f:
+    with open(os.path.join(repo, "assets.js"), "w") as f:
         f.write("const QIKPIK_ASSETS = ")
         json.dump(out, f)
         f.write(";\n")

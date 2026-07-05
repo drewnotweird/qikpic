@@ -17,6 +17,7 @@ jobs:
         run: |
           mkdir dist
           cp index.html app.js assets.js style.css dist/
+          cp public/.htaccess dist/
           cp -R icons dist/icons
           mkdir dist/public
           cp public/favicon.png public/og-qikpic.jpg dist/public/
