@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Static site — no build step. Assemble just the files the site needs
+      # (leaves out tools/, ruffle-test/, server.js).
+      - name: Assemble site
+        run: |
+          mkdir dist
+          cp index.html app.js assets.js style.css dist/
+          cp -R icons dist/icons
+
+      - name: Deploy to Fasthosts via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          timeout: 120000
