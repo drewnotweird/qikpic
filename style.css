@@ -175,7 +175,15 @@ body {
 .qp-grid__tile:hover { filter: brightness(1.08); }
 .qp-grid__tile:active { filter: brightness(0.92); }
 
-.qp-grid__tile--active { box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.85); }
+/* active ring drawn on an overlay so the full-bleed colour swatch on the
+   skin / hair-colour tiles can't paint over it */
+.qp-grid__tile--active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
 
 /* live colour swatch behind the icon on the skin / hair colour tiles */
 .qp-grid__swatch {
