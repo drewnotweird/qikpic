@@ -23,13 +23,21 @@
 <div class="qp-app">
   <header class="qp-top">
     <div class="qp-top__actions qp-top__actions--left">
-      <button class="qp-top__btn" id="btnPng" title="Download PNG">PNG</button>
-      <button class="qp-top__btn" id="btnSvg" title="Download SVG">SVG</button>
+      <button class="qp-top__btn" id="btnPng" title="Download PNG" aria-label="Download PNG">
+        <img class="qp-top__btn-icon" src="icons/btn-download.svg" alt="">
+      </button>
+      <button class="qp-top__btn" id="btnShare" title="Share" aria-label="Share">
+        <img class="qp-top__btn-icon" src="icons/btn-share.svg" alt="">
+      </button>
     </div>
     <img class="qp-top__logo" src="icons/logo.svg" alt="QikPic">
     <div class="qp-top__actions qp-top__actions--right">
-      <button class="qp-top__btn qp-top__btn--randomise" id="btnRandom" title="Randomise">🎲</button>
-      <button class="qp-top__btn" id="btnAbout" title="About">About</button>
+      <button class="qp-top__btn" id="btnRandom" title="Randomise" aria-label="Randomise">
+        <img class="qp-top__btn-icon" src="icons/btn-random.svg" alt="">
+      </button>
+      <button class="qp-top__btn" id="btnAbout" title="About" aria-label="About">
+        <img class="qp-top__btn-icon" src="icons/btn-about.svg" alt="">
+      </button>
     </div>
   </header>
 
@@ -41,7 +49,7 @@
         iOS and Android. Artwork and design by
         <a href="https://drewnotweird.co.uk/work/qikpic/" target="_blank" rel="noopener">Andrew Nicolson</a>.
       </p>
-      <button class="qp-about__close qp-top__btn" id="btnAboutClose">Close</button>
+      <button class="qp-about__close" id="btnAboutClose">Close</button>
     </div>
   </div>
 

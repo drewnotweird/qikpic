@@ -124,16 +124,8 @@
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + svg.outerHTML;
   }
 
-  $("btnSvg").onclick = () => {
-    const blob = new Blob([fullSvgString()], { type: "image/svg+xml" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "qikpik-avatar.svg";
-    a.click();
-    URL.revokeObjectURL(a.href);
-  };
-
-  $("btnPng").onclick = () => {
+  // Rasterise the current avatar to a 1024px PNG blob.
+  function avatarPng(cb) {
     const blob = new Blob([fullSvgString()], { type: "image/svg+xml" });
     const url = URL.createObjectURL(blob);
     const img = new Image();
@@ -145,15 +137,44 @@
       ctx.fillRect(0, 0, 1024, 1024);
       ctx.drawImage(img, 0, 0, 1024, 1024);
       URL.revokeObjectURL(url);
-      c.toBlob((png) => {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(png);
-        a.download = "qikpik-avatar.png";
-        a.click();
-        URL.revokeObjectURL(a.href);
-      });
+      c.toBlob(cb, "image/png");
     };
     img.src = url;
+  }
+
+  $("btnPng").onclick = () => {
+    avatarPng((png) => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(png);
+      a.download = "qikpic-avatar.png";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  };
+
+  $("btnShare").onclick = () => {
+    avatarPng(async (png) => {
+      const file = new File([png], "qikpic-avatar.png", { type: "image/png" });
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: "QikPic avatar" });
+          return;
+        }
+        if (navigator.share) {
+          await navigator.share({ title: "QikPic avatar", url: location.href });
+          return;
+        }
+        throw new Error("no share support");
+      } catch (e) {
+        if (e.name === "AbortError") return;   // user cancelled the share sheet
+        // last resort: download the image instead
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(png);
+        a.download = "qikpic-avatar.png";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+    });
   };
 
   /* ---------- boot ---------- */
