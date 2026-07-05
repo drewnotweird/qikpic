@@ -31,18 +31,14 @@ body {
   height: var(--qp-strip);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 0 22px;
   background: #fff;
 }
 
-/* original app wordmark, centred in the strip — wide in landscape,
-   stacked variant in portrait */
+/* original app wordmark — wide in landscape, stacked variant in portrait */
 .qp-top__logo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   height: 38px;
 }
 
@@ -97,6 +93,7 @@ body {
   align-items: center;
   justify-content: center;
   background: rgba(39, 56, 58, 0.55);
+  animation: qp-fade 0.25s ease;
 }
 
 /* display:flex above would otherwise override the hidden attribute */
@@ -110,9 +107,56 @@ body {
   margin: 20px;
   text-align: center;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  animation: qp-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.qp-about__logo { height: 34px; margin-bottom: 14px; }
+.qp-about__logo {
+  height: 34px;
+  margin-bottom: 14px;
+  animation: qp-wiggle 0.7s 0.35s ease-in-out;
+}
+
+/* bobbing parade of the category icons */
+.qp-about__parade {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin: 4px 0 18px;
+}
+
+.qp-about__chip {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: qp-bob 1.5s calc(var(--i) * 0.12s) ease-in-out infinite;
+}
+
+.qp-about__chip img {
+  width: 64%;
+  display: block;
+}
+
+@keyframes qp-fade {
+  from { opacity: 0; }
+}
+
+@keyframes qp-pop {
+  from { transform: scale(0.5); opacity: 0; }
+}
+
+@keyframes qp-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-7deg) scale(1.08); }
+  60% { transform: rotate(6deg) scale(1.05); }
+}
+
+@keyframes qp-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
 
 .qp-about__text {
   margin: 0 0 20px;
