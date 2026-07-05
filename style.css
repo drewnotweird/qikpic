@@ -57,8 +57,6 @@ body {
   .qp-top__logo--stacked { height: 56px; }
 }
 
-.qp-top__actions { display: flex; gap: 8px; }
-
 /* icon-only buttons using the original app's option-panel glyphs */
 .qp-top__btn {
   border: 0;
