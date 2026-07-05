@@ -87,6 +87,46 @@
     buildRail($("gridRight"), TILES.slice(5, 10));
   }
 
+  /* ---------- juice helpers ---------- */
+  function retrigger(el, cls) {
+    el.classList.remove(cls);
+    void el.getBoundingClientRect();  // reflow so the animation restarts
+    el.classList.add(cls);
+  }
+
+  // Layers where popping just the changed art reads well; full-canvas
+  // layers (skin, colours) and the stencils get a whole-avatar squash.
+  const POP_LAYERS = new Set(["natural", "mouth", "eyes", "nose", "accessories", "glasses"]);
+
+  function reactToChange(key) {
+    if (POP_LAYERS.has(key)) retrigger($("L_" + key), "qp-pop");
+    else retrigger($("avatar"), "qp-bounce");
+  }
+
+  const CONFETTI_COLOURS = ["#da4341", "#d945c1", "#6243da", "#4178db",
+                            "#41d4db", "#46dc42", "#dcd742", "#da7242"];
+
+  function confettiBurst(el) {
+    const r = el.getBoundingClientRect();
+    const wrap = document.createElement("div");
+    wrap.className = "qp-confetti";
+    wrap.style.left = `${r.left + r.width / 2}px`;
+    wrap.style.top = `${r.top + r.height / 2}px`;
+    for (let i = 0; i < 18; i++) {
+      const bit = document.createElement("span");
+      bit.className = "qp-confetti__bit";
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 50 + Math.random() * 70;
+      bit.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+      bit.style.setProperty("--dy", `${Math.sin(angle) * dist - 40}px`);
+      bit.style.setProperty("--rot", `${(Math.random() - 0.5) * 540}deg`);
+      bit.style.background = CONFETTI_COLOURS[i % CONFETTI_COLOURS.length];
+      wrap.appendChild(bit);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(() => wrap.remove(), 900);
+  }
+
   // Tap a tile (or the avatar) to flip to the next variant — like the
   // original app's hitzone.
   function cycle(key) {
@@ -94,6 +134,7 @@
     state[key] = (state[key] + 1) % n;
     renderAvatar();
     buildGrid();
+    reactToChange(key);
   }
 
   $("avatar").addEventListener("click", () => cycle(activeKey));
@@ -103,6 +144,7 @@
   $("btnRandom").onclick = () => {
     if (randomising) return;
     randomising = true;
+    $("btnRandom").classList.add("qp-spin");
     const steps = 8;
     const spin = (n) => {
       for (const key of Object.keys(A)) {
@@ -111,7 +153,9 @@
       renderAvatar();
       if (n >= steps) {
         randomising = false;
+        $("btnRandom").classList.remove("qp-spin");
         buildGrid();
+        retrigger($("avatar"), "qp-bounce");
         return;
       }
       // slot-machine feel: quick flips that slow to a stop
@@ -157,6 +201,7 @@
   }
 
   $("btnPng").onclick = () => {
+    confettiBurst($("btnPng"));
     avatarPng((png) => {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(png);
@@ -167,6 +212,7 @@
   };
 
   $("btnShare").onclick = () => {
+    confettiBurst($("btnShare"));
     avatarPng(async (png) => {
       const file = new File([png], avatarFileName(), { type: "image/png" });
       try {

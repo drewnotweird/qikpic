@@ -156,6 +156,58 @@ body {
   50% { transform: translateY(-7px); }
 }
 
+/* ---------- juice: reactions, spins and confetti ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* whole-avatar squash & stretch when something changes */
+  .qp-stage__svg { transform-origin: 50% 100%; }
+  .qp-stage__svg.qp-bounce { animation: qp-squash 0.32s ease; }
+
+  /* changed feature layer pops */
+  .qp-stage__svg g[id^="L_"] {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+  .qp-stage__svg g.qp-pop { animation: qp-layer-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  /* dice spins while the slot machine runs */
+  .qp-top__btn.qp-spin .qp-top__btn-icon { animation: qp-rot 0.5s linear infinite; }
+}
+
+@keyframes qp-squash {
+  30% { transform: scale(1.02, 0.94); }
+  65% { transform: scale(0.985, 1.02); }
+}
+
+@keyframes qp-layer-pop {
+  0% { transform: scale(0.7); }
+}
+
+@keyframes qp-rot {
+  to { transform: rotate(360deg); }
+}
+
+/* confetti burst on download / share */
+.qp-confetti {
+  position: fixed;
+  z-index: 20;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.qp-confetti__bit {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  animation: qp-confetti-fly 0.8s cubic-bezier(0.16, 0.8, 0.4, 1) forwards;
+}
+
+@keyframes qp-confetti-fly {
+  from { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+}
+
 .qp-about__text {
   margin: 0 0 20px;
   font-size: 14px;
@@ -245,7 +297,11 @@ body {
   max-width: 62%;
   pointer-events: none;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+  transition: transform 0.15s ease;
 }
+
+.qp-grid__tile:hover .qp-grid__icon { transform: scale(1.18) rotate(-4deg); }
+.qp-grid__tile:active .qp-grid__icon { transform: scale(0.9); }
 
 /* ---------- landscape: avatar centred, rails stacked left/right ---------- */
 @media (orientation: landscape) {
