@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QikPic — Avatar Maker</title>
 <meta name="description" content="Make your own QikPic avatar — mix and match skin, eyes, hair, beards, glasses and more, then download it!">
-<link rel="icon" type="image/png" href="public/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32.png">
+<link rel="icon" type="image/png" sizes="800x800" href="public/favicon.png">
+<link rel="apple-touch-icon" href="public/apple-touch-icon.png">
+<link rel="manifest" href="public/manifest.json">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="website">
 <meta property="og:title" content="QikPic — Avatar Maker">
 <meta property="og:description" content="Make your own QikPic avatar — mix and match skin, eyes, hair, beards, glasses and more.">
@@ -17,7 +21,7 @@
 <meta name="twitter:title" content="QikPic — Avatar Maker">
 <meta name="twitter:description" content="Make your own QikPic avatar — mix and match skin, eyes, hair, beards, glasses and more.">
 <meta name="twitter:image" content="https://drewnotweird.co.uk/qikpic/public/og-qikpic.jpg">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=__V__">
 </head>
 <body>
 <div class="qp-app">
@@ -87,7 +91,8 @@
     <nav class="qp-rail" id="gridRight"></nav>
   </main>
 </div>
-<script src="assets.js"></script>
-<script src="app.js"></script>
+<div class="qp-visually-hidden" id="announcer" aria-live="polite"></div>
+<script src="assets.js?v=__V__"></script>
+<script src="app.js?v=__V__"></script>
 </body>
 </html>

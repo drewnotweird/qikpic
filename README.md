@@ -39,8 +39,16 @@ is a direct silhouette stencil masking the beard colour. This reproduces
 the original app's runtime `mask` assignments exactly.
 
 Beard colour always follows hair colour. Tap a tile (or the avatar) to
-cycle that category; the dice does a slot-machine randomise; PNG/SVG
-download the current avatar.
+cycle that category; long-press or right-click cycles backwards; arrow
+keys work too (left/right = cycle, up/down = switch category). The dice
+does a slot-machine randomise. The avatar state lives in the URL hash,
+so sharing the link reproduces the avatar. Installable as a PWA and
+works offline after the first visit (service worker, https only).
+
+`scripts/smoke.js` runs in CI before every deploy (syntax, asset
+integrity, referenced files, server check). The deploy stamps the commit
+sha into the `?v=` cache-busting query strings and the service-worker
+cache name.
 
 ## Editing the artwork
 

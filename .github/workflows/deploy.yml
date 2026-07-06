@@ -11,16 +11,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Fail fast before anything reaches the server.
+      - name: Smoke test
+        run: node scripts/smoke.js
+
       # Static site — no build step. Assemble just the files the site needs
       # (leaves out tools/, ruffle-test/, server.js).
       - name: Assemble site
         run: |
           mkdir dist
-          cp index.html app.js assets.js style.css dist/
+          cp index.html app.js assets.js style.css sw.js dist/
           cp public/.htaccess dist/
           cp -R icons dist/icons
           mkdir dist/public
-          cp public/*.png public/*.jpg dist/public/
+          cp public/*.png public/*.jpg public/manifest.json dist/public/
+
+      # Cache-busting: stamp the commit sha into the ?v= query strings and
+      # the service-worker cache name, so every deploy invalidates cleanly.
+      - name: Stamp version
+        run: |
+          V="${GITHUB_SHA::8}"
+          sed -i "s/__V__/$V/g" dist/index.html dist/sw.js
 
       # FTP-Deploy-Action requires server-dir to end with "/" — normalise
       # so the secret works with or without a trailing slash.
